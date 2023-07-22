@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {View,Text,StyleSheet} from 'react-native'
+import {View,Text,StyleSheet, ScrollView} from 'react-native'
 import SearchBar from '../components/SearchBar'
 import useResults from "../hooks/useResults";
 import ResultsList from "../components/ResultsList";
 
+
 const SearchScreen=()=>{
+
     const [term,setTerm]=useState('')
     const [searchApi,results,errorMsg]=useResults()
     const filterResultByPrice=(price)=>{
@@ -13,17 +15,32 @@ const SearchScreen=()=>{
         })
     }
     return (
-        <View>
+        <>
              <SearchBar term={term}
               onTermChange={(newTerm)=>setTerm(newTerm)}
               onTermSubmit={()=>searchApi(term)}
               />
             { errorMsg?<Text>{errorMsg}</Text>:null}
-            <Text>we have found {results.length}</Text>
-            <ResultsList results={filterResultByPrice("$")}   title="Cost Effective"/>
-            <ResultsList results={filterResultByPrice("$$")}  title="Bit Pricier"/>
-            <ResultsList results={filterResultByPrice("$$$")} title="Big Spender"/>
-        </View>
+            {/* <Text style={{fontSize:18,
+                        fontWeight:'bold',
+                        marginLeft:15}}
+                        >Results: {results.length}</Text> */}
+            <ScrollView>
+            <ResultsList 
+            results={filterResultByPrice("$")}  
+            title="Cost Effective"
+             />
+            <ResultsList 
+            results={filterResultByPrice("$$")}  
+            title="Bit Pricier"
+            
+            />
+            <ResultsList 
+            results={filterResultByPrice("$$$")} 
+            title="Big Spender"
+            />
+            </ScrollView>
+        </>
     )
 };
 const styls=StyleSheet.create({
